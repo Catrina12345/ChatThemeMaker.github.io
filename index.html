@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Theme Builder</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f6f9;
+        padding: 20px;
+    }
+
+    .container {
+        max-width: 700px;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+    }
+
+    h2 {
+        margin-bottom: 10px;
+    }
+
+    label {
+        display: flex;
+        justify-content: space-between;
+        margin: 8px 0;
+        font-size: 14px;
+    }
+
+    input[type="color"], input[type="text"] {
+        width: 120px;
+    }
+
+    .preview {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+    }
+
+    button {
+        margin-top: 15px;
+        padding: 10px;
+        cursor: pointer;
+        border: none;
+        background: #007bff;
+        color: white;
+        border-radius: 6px;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Theme Builder</h2>
+
+    <label>Theme Name:
+        <input type="text" id="themeName" value="default">
+    </label>
+
+    <label>Background:
+        <input type="color" id="bg" value="#f4f6f9">
+    </label>
+
+    <label>Chat Background:
+        <input type="color" id="chatBg" value="#ffffff">
+    </label>
+
+    <label>Sidebar Background:
+        <input type="color" id="sidebarBg" value="#f8f9fa">
+    </label>
+
+    <label>Text Color:
+        <input type="color" id="textColor" value="#333333">
+    </label>
+
+    <label>Border Color:
+        <input type="color" id="borderColor" value="#e0e0e0">
+    </label>
+
+    <label>Sent Bubble:
+        <input type="color" id="bubbleSent" value="#007bff">
+    </label>
+
+    <label>Sent Text:
+        <input type="color" id="textSent" value="#ffffff">
+    </label>
+
+    <label>Received Bubble:
+        <input type="color" id="bubbleReceived" value="#f1f0f0">
+    </label>
+
+    <label>Received Text:
+        <input type="color" id="textReceived" value="#333333">
+    </label>
+
+    <label>Timestamp Color:
+        <input type="color" id="timestampColor" value="#888888">
+    </label>
+
+    <button onclick="downloadTheme()">Download Theme</button>
+
+    <div class="preview" id="previewBox">
+        Preview Box (changes visually not required but structure ready)
+    </div>
+</div>
+
+<script>
+function buildThemeString() {
+    const name = document.getElementById("themeName").value || "default";
+
+    const css =
+`html[data-theme="${name}"] {
+    --bg-color: ${document.getElementById("bg").value};
+    --chat-bg: ${document.getElementById("chatBg").value};
+    --sidebar-bg: ${document.getElementById("sidebarBg").value};
+    --text-color: ${document.getElementById("textColor").value};
+    --border-color: ${document.getElementById("borderColor").value};
+    --bubble-sent: ${document.getElementById("bubbleSent").value};
+    --text-sent: ${document.getElementById("textSent").value};
+    --bubble-received: ${document.getElementById("bubbleReceived").value};
+    --text-received: ${document.getElementById("textReceived").value};
+    --timestamp-color: ${document.getElementById("timestampColor").value};
+}`;
+
+    return css;
+}
+
+function downloadTheme() {
+    const text = buildThemeString();
+    const name = document.getElementById("themeName").value || "theme";
+
+    const blob = new Blob([text], { type: "text/plain" });
+    const link = document.createElement("a");
+
+    link.href = URL.createObjectURL(blob);
+    link.download = name + ".txt";
+    link.click();
+}
+</script>
+
+</body>
+</html>
