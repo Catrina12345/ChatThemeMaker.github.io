@@ -1,271 +1,462 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" data-theme="my-theme">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chat Theme Creator</title>
 
 <style>
+:root {
+    --bg-color: #f4f6f9;
+    --chat-bg: #ffffff;
+    --sidebar-bg: #f8f9fa;
+    --text-color: #333333;
+    --border-color: #e0e0e0;
+    --bubble-sent: #007bff;
+    --text-sent: #ffffff;
+    --bubble-received: #f1f0f0;
+    --text-received: #333333;
+    --timestamp-color: #888888;
+}
 
 * {
-    box-sizing:border-box;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background:#eef2f7;
-    padding:20px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg-color);
+    color: var(--text-color);
+    padding: 20px;
+    transition: background 0.2s ease;
 }
 
 .container {
-    max-width:900px;
-    margin:auto;
+    max-width: 1200px;
+    margin: auto;
 }
 
 h1 {
-    text-align:center;
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 700;
 }
 
-.editor {
-    background:white;
-    padding:20px;
-    border-radius:14px;
-    box-shadow:0 5px 20px #0002;
+.main-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+@media (min-width: 900px) {
+    .main-layout {
+        grid-template-columns: 1fr 1.2fr;
+    }
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    border-bottom: 20px;
+    padding-bottom: 5px;
+}
+
+.section-title {
+    font-size: 1rem;
+    margin: 15px 0 8px 0;
+    font-weight: 600;
+}
+
+label {
+    display: block;
+    font-size: 0.85rem;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+input[type=text], textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin-bottom: 12px;
+    font-family: monospace;
 }
 
 .grid {
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:12px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
 }
-
 
 .color-box {
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:10px;
-    background:#f5f5f5;
-    border-radius:8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: #f8f9fa;
+    border: 1px solid #eef2f7;
+    border-radius: 8px;
+    font-size: 0.9rem;
 }
-
 
 input[type=color] {
-    width:55px;
-    height:35px;
-    border:none;
+    width: 45px;
+    height: 30px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background: none;
 }
 
-
-input[type=text] {
-    width:100%;
-    padding:10px;
-    border-radius:8px;
-    border:1px solid #ccc;
-    margin-bottom:15px;
+.btn-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
 }
-
-
-.preview {
-    margin-top:20px;
-    padding:15px;
-    border-radius:12px;
-}
-
-
-.chat {
-    padding:15px;
-    border-radius:10px;
-}
-
-
-.msg {
-    padding:10px;
-    margin:8px;
-    border-radius:15px;
-    width:max-content;
-    max-width:80%;
-}
-
-
-.sent {
-    margin-left:auto;
-}
-
 
 button {
-    margin-top:15px;
-    width:100%;
-    padding:12px;
-    border:none;
-    border-radius:8px;
-    background:#007bff;
-    color:white;
-    cursor:pointer;
+    flex: 1;
+    min-width: 120px;
+    padding: 10px 14px;
+    border: none;
+    border-radius: 8px;
+    background: #007bff;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    font-size: 0.85rem;
 }
-
 
 button:hover {
-    opacity:.8;
+    opacity: .85;
 }
 
+button.secondary {
+    background: #6c757d;
+}
 
+button.accent {
+    background: #28a745;
+}
+
+button.warn {
+    background: #dc3545;
+}
+
+.slider-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.slider-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.slider-item input {
+    flex: 1;
+}
+
+.preset-select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: white;
+    margin-bottom: 10px;
+}
+
+.preview-window {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    display: flex;
+    height: 550px;
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+}
+
+.preview-sidebar {
+    width: 80px;
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px 0;
+    gap: 15px;
+}
+
+@media (min-width: 480px) {
+    .preview-sidebar { width: 200px; align-items: stretch; padding: 15px; }
+}
+
+.sidebar-item {
+    height: 35px;
+    background: rgba(0,0,0,0.05);
+    border-radius: 6px;
+    width: 80%;
+    align-self: center;
+}
+
+.sidebar-item.active {
+    background: var(--bubble-sent);
+    opacity: 0.15;
+}
+
+.preview-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: var(--chat-bg);
+}
+
+.preview-header {
+    height: 60px;
+    background: var(--chat-bg);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    font-weight: bold;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.msg {
+    padding: 10px 14px;
+    border-radius: 16px;
+    max-width: 75%;
+    width: fit-content;
+    font-size: 0.95rem;
+    position: relative;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.sent {
+    background: var(--bubble-sent);
+    color: var(--text-sent);
+    margin-left: auto;
+    border-bottom-right-radius: 4px;
+}
+
+.received {
+    background: var(--bubble-received);
+    color: var(--text-received);
+    margin-right: auto;
+    border-bottom-left-radius: 4px;
+}
+
+.timestamp {
+    font-size: 0.7rem;
+    color: var(--timestamp-color);
+    margin-top: 4px;
+    text-align: right;
+    display: block;
+}
+
+.preview-footer {
+    padding: 12px;
+    background: var(--chat-bg);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    gap: 10px;
+}
+
+.preview-input {
+    flex: 1;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 8px 16px;
+    background: var(--bg-color);
+    pointer-events: none;
+    font-size: 0.9rem;
+    color: var(--text-color);
+    opacity: 0.7;
+}
+
+.preview-send-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--bubble-sent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-sent);
+    font-size: 1rem;
+}
 </style>
 </head>
-
 <body>
 
 <div class="container">
+    <h1>Chat Theme Creator</h1>
 
-<h1>🎨 Chat Theme Creator</h1>
+    <div class="main-layout">
+        <div class="controls-panel">
+            
+            <div class="card">
+                <h2>Theme Metadata</h2>
+                <label for="themeName">Theme Selector Slug Name</label>
+                <input id="themeName" type="text" value="my-custom-theme">
+                
+                <div class="btn-group">
+                    <button class="secondary" onclick="generateRandomTheme()">Randomize</button>
+                    <button class="secondary" onclick="generateHarmony('complementary')">Complementary</button>
+                </div>
+                <div class="btn-group">
+                    <button class="secondary" onclick="generateHarmony('analogous')">Analogous</button>
+                    <button class="secondary" onclick="generateHarmony('triadic')">Triadic</button>
+                </div>
+            </div>
 
+            <div class="card">
+                <h2>Preset Configurations</h2>
+                <select id="presetSelect" class="preset-select" onchange="loadPreset()">
+                    <option value="">-- Choose Built-in Theme --</option>
+                    <option value="modern-dark">Cyber Midnight Dark</option>
+                    <option value="mint-fresh">Fresh Botanical Mint</option>
+                    <option value="sunset-glow">Warm Sunset Glow</option>
+                    <option value="classic-blue">Standard Messenger Blue</option>
+                </select>
+            </div>
 
-<div class="editor">
+            <div class="card">
+                <h2>Color Mapping Palette</h2>
+                <div class="grid" id="colorPickerGrid">
+                    <div class="color-box">Wallpaper Background <input id="bg" type="color" value="#f4f6f9"></div>
+                    <div class="color-box">Chat Panel Base <input id="chat" type="color" value="#ffffff"></div>
+                    <div class="color-box">Sidebar Container <input id="sidebar" type="color" value="#f8f9fa"></div>
+                    <div class="color-box">Standard Typography <input id="text" type="color" value="#333333"></div>
+                    <div class="color-box">Borders / Dividers <input id="border" type="color" value="#e0e0e0"></div>
+                    <div class="color-box">Sent Bubble fill <input id="sent" type="color" value="#007bff"></div>
+                    <div class="color-box">Sent Bubble Font <input id="sentText" type="color" value="#ffffff"></div>
+                    <div class="color-box">Received Bubble fill <input id="received" type="color" value="#f1f0f0"></div>
+                    <div class="color-box">Received Bubble Font <input id="receivedText" type="color" value="#333333"></div>
+                    <div class="color-box">Metadata Timestamp <input id="timestamp" type="color" value="#888888"></div>
+                </div>
 
-<label>
-Theme Name
-</label>
+                <div class="slider-container">
+                    <div class="section-title">Relative Modifiers (Selected Target)</div>
+                    <div class="slider-item">
+                        <label style="width:75px;">Brightness</label>
+                        <input type="range" id="brightnessSlider" min="-50" max="50" value="0" oninput="adjustColorProperty('lightness', this.value)">
+                    </div>
+                    <div class="slider-item">
+                        <label style="width:75px;">Saturation</label>
+                        <input type="range" id="saturationSlider" min="-50" max="50" value="0" oninput="adjustColorProperty('saturation', this.value)">
+                    </div>
+                </div>
+            </div>
 
-<input id="themeName" value="my-theme">
+            <div class="card">
+                <h2>Import / Export Engines</h2>
+                <div class="btn-group">
+                    <button class="accent" onclick="copyTheme()">Copy Block CSS</button>
+                    <button class="accent" onclick="downloadTheme()">Download Code</button>
+                </div>
+                <label for="importArea">Paste [data-theme] Block Text to Parse:</label>
+                <textarea id="importArea" rows="4" placeholder="html[data-theme='name'] { --bg-color: #fff; ... }"></textarea>
+                <button class="warn" onclick="importCSS()">Process & Import Text</button>
+            </div>
+        </div>
 
+        <div class="preview-panel">
+            <div class="card" style="position: sticky; top: 20px;">
+                <h2>Full Chat Interface UI Live Preview</h2>
+                
+                <div class="preview-window">
+                    <div class="preview-sidebar">
+                        <div class="sidebar-item active"></div>
+                        <div class="sidebar-item"></div>
+                        <div class="sidebar-item"></div>
+                    </div>
 
-<div class="grid">
+                    <div class="preview-main">
+                        <div class="preview-header">
+                            Room Discussion Context
+                        </div>
 
+                        <div class="chat-messages">
+                            <div class="msg received">
+                                Have fun making your own themes!
+                                <span class="timestamp">10:42 AM</span>
+                            </div>
+                            <div class="msg sent">
+                                I will!
+                                <span class="timestamp">10:43 AM</span>
+                            </div>
+                            <div class="msg received">
+                                You better.
+                                <span class="timestamp">10:44 AM</span>
+                            </div>
+                        </div>
 
-<div class="color-box">
-Background
-<input id="bg" type="color" value="#f4f6f9">
+                        <div class="preview-footer">
+                            <div class="preview-input">Write a custom mock message...</div>
+                            <div class="preview-send-btn">></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>
-
-
-<div class="color-box">
-Chat Background
-<input id="chat" type="color" value="#ffffff">
-</div>
-
-
-<div class="color-box">
-Sidebar
-<input id="sidebar" type="color" value="#f8f9fa">
-</div>
-
-
-<div class="color-box">
-Text
-<input id="text" type="color" value="#333333">
-</div>
-
-
-<div class="color-box">
-Border
-<input id="border" type="color" value="#e0e0e0">
-</div>
-
-
-<div class="color-box">
-Sent Bubble
-<input id="sent" type="color" value="#007bff">
-</div>
-
-
-<div class="color-box">
-Sent Text
-<input id="sentText" type="color" value="#ffffff">
-</div>
-
-
-<div class="color-box">
-Received Bubble
-<input id="received" type="color" value="#f1f0f0">
-</div>
-
-
-<div class="color-box">
-Received Text
-<input id="receivedText" type="color" value="#333333">
-</div>
-
-
-<div class="color-box">
-Timestamp
-<input id="timestamp" type="color" value="#888888">
-</div>
-
-
-</div>
-
-
-<button onclick="downloadTheme()">
-⬇ Download Theme
-</button>
-
-
-<button onclick="copyTheme()">
-📋 Copy CSS
-</button>
-
-
-</div>
-
-
-
-<div class="preview" id="preview">
-
-<h2>Live Preview</h2>
-
-
-<div class="chat" id="chatPreview">
-
-
-<div class="msg receivedMsg">
-Hello! This is received
-</div>
-
-
-<div class="msg sentMsg">
-This is your message
-</div>
-
-
-<div class="msg receivedMsg">
-Your theme looks cool!
-</div>
-
-
-</div>
-
-
-</div>
-
-
-</div>
-
 
 <script>
+const ids = ["bg", "chat", "sidebar", "text", "border", "sent", "sentText", "received", "receivedText", "timestamp"];
 
+const presets = {
+    "modern-dark": { bg: "#0d1117", chat: "#161b22", sidebar: "#0d1117", text: "#c9d1d9", border: "#30363d", sent: "#238636", sentText: "#ffffff", received: "#21262d", receivedText: "#c9d1d9", timestamp: "#8b949e" },
+    "mint-fresh": { bg: "#e8f5e9", chat: "#ffffff", sidebar: "#c8e6c9", text: "#2e7d32", border: "#a5d6a7", sent: "#4caf50", sentText: "#ffffff", received: "#e8f5e9", receivedText: "#1b5e20", timestamp: "#81c784" },
+    "sunset-glow": { bg: "#fdf0ed", chat: "#ffffff", sidebar: "#fbe9e7", text: "#4e342e", border: "#ffccbc", sent: "#d84315", sentText: "#ffffff", received: "#fbe9e7", receivedText: "#5d4037", timestamp: "#ff8a65" },
+    "classic-blue": { bg: "#eef2f7", chat: "#ffffff", sidebar: "#f8f9fa", text: "#333333", border: "#e0e0e0", sent: "#007bff", sentText: "#ffffff", received: "#f1f0f0", receivedText: "#333333", timestamp: "#888888" }
+};
 
-const ids=[
-"bg",
-"chat",
-"sidebar",
-"text",
-"border",
-"sent",
-"sentText",
-"received",
-"receivedText",
-"timestamp"
-];
+window.addEventListener('DOMContentLoaded', () => {
+    const saved = localStorage.getItem('chat_theme_backup');
+    if (saved) {
+        try {
+            const data = JSON.parse(saved);
+            ids.forEach(id => { if(data[id]) document.getElementById(id).value = data[id]; });
+            if(data.themeName) document.getElementById('themeName').value = data.themeName;
+        } catch(e) {}
+    }
+    updatePreview();
+});
 
+function getCleanThemeSlug() {
+    return document.getElementById("themeName").value.replace(/[^a-zA-Z0-9-_]/g, "-");
+}
 
-function cssText(){
-
-
-let name =
-document.getElementById("themeName").value
-.replace(/[^a-zA-Z0-9-_]/g,"-");
-
-
-return `html[data-theme="${name}"] {
+function generateCSSText() {
+    const name = getCleanThemeSlug();
+    return `html[data-theme="${name}"] {
     --bg-color: ${bg.value};
     --chat-bg: ${chat.value};
     --sidebar-bg: ${sidebar.value};
@@ -277,89 +468,187 @@ return `html[data-theme="${name}"] {
     --text-received: ${receivedText.value};
     --timestamp-color: ${timestamp.value};
 }`;
-
 }
 
+function updatePreview() {
+    const root = document.documentElement;
+    const backupObj = { themeName: document.getElementById('themeName').value };
 
+    ids.forEach(id => {
+        const val = document.getElementById(id).value;
+        backupObj[id] = val;
+        if(id === 'bg') root.style.setProperty('--bg-color', val);
+        if(id === 'chat') root.style.setProperty('--chat-bg', val);
+        if(id === 'sidebar') root.style.setProperty('--sidebar-bg', val);
+        if(id === 'text') root.style.setProperty('--text-color', val);
+        if(id === 'border') root.style.setProperty('--border-color', val);
+        if(id === 'sent') root.style.setProperty('--bubble-sent', val);
+        if(id === 'sentText') root.style.setProperty('--text-sent', val);
+        if(id === 'received') root.style.setProperty('--bubble-received', val);
+        if(id === 'receivedText') root.style.setProperty('--text-received', val);
+        if(id === 'timestamp') root.style.setProperty('--timestamp-color', val);
+    });
 
-function updatePreview(){
-
-
-document.body.style.background=bg.value;
-
-
-chatPreview.style.background=chat.value;
-
-
-chatPreview.style.color=text.value;
-
-
-document.querySelectorAll(".sentMsg")
-.forEach(x=>{
-x.style.background=sent.value;
-x.style.color=sentText.value;
-});
-
-
-document.querySelectorAll(".receivedMsg")
-.forEach(x=>{
-x.style.background=received.value;
-x.style.color=receivedText.value;
-});
-
-
+    localStorage.setItem('chat_theme_backup', JSON.stringify(backupObj));
 }
 
-
-
-document.querySelectorAll("input")
-.forEach(x=>{
-x.addEventListener("input",updatePreview);
+document.querySelectorAll("input[type=color], #themeName").forEach(el => {
+    el.addEventListener("input", () => {
+        updatePreview();
+        document.getElementById('brightnessSlider').value = 0;
+        document.getElementById('saturationSlider').value = 0;
+    });
 });
 
+function loadPreset() {
+    const key = document.getElementById('presetSelect').value;
+    if (!key || !presets[key]) return;
+    const items = presets[key];
+    ids.forEach(id => { document.getElementById(id).value = items[id]; });
+    document.getElementById('themeName').value = key;
+    updatePreview();
+}
 
+function hexToHSL(H) {
+    let r = 0, g = 0, b = 0;
+    if (H.length == 4) {
+        r = "0x" + H[1] + H[1]; g = "0x" + H[2] + H[2]; b = "0x" + H[3] + H[3];
+    } else if (H.length == 7) {
+        r = "0x" + H[1] + H[2]; g = "0x" + H[3] + H[4]; b = "0x" + H[5] + H[6];
+    }
+    r /= 255; g /= 255; b /= 255;
+    let cmin = Math.min(r,g,b), cmax = Math.max(r,g,b), delta = cmax - cmin, h = 0, s = 0, l = 0;
+    if (delta == 0) h = 0;
+    else if (cmax == r) h = ((g - b) / delta) % 6;
+    else if (cmax == g) h = (b - r) / delta + 2;
+    else h = (r - g) / delta + 4;
+    h = Math.round(h * 60);
+    if (h < 0) h += 360;
+    l = (cmax + cmin) / 2;
+    s = delta == 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
+    s = +(s * 100).toFixed(1); l = +(l * 100).toFixed(1);
+    return { h, s, l };
+}
+
+function hslToHex(h, s, l) {
+    s /= 100; l /= 100;
+    let c = (1 - Math.abs(2 * l - 1)) * s, x = c * (1 - Math.abs((h / 60) % 2 - 1)), m = l - c/2, r = 0, g = 0, b = 0;
+    if (0 <= h && h < 60) { r = c; g = x; b = 0; }
+    else if (60 <= h && h < 120) { r = x; g = c; b = 0; }
+    else if (120 <= h && h < 180) { r = 0; g = c; b = x; }
+    else if (180 <= h && h < 240) { r = 0; g = x; b = c; }
+    else if (240 <= h && h < 300) { r = x; g = 0; b = c; }
+    else if (300 <= h && h < 360) { r = c; g = 0; b = x; }
+    let r_hex = Math.round((r + m) * 255).toString(16).padStart(2, '0');
+    let g_hex = Math.round((g + m) * 255).toString(16).padStart(2, '0');
+    let b_hex = Math.round((b + m) * 255).toString(16).padStart(2, '0');
+    return `#${r_hex}${g_hex}${b_hex}`;
+}
+
+function generateRandomTheme() {
+    const randHex = () => '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+    ids.forEach(id => { document.getElementById(id).value = randHex(); });
+    updatePreview();
+}
+
+function generateHarmony(type) {
+    const baseColor = document.getElementById('sent').value;
+    const hsl = hexToHSL(baseColor);
+    
+    let secondaryHue, tertiaryHue;
+    if (type === 'complementary') {
+        secondaryHue = (hsl.h + 180) % 360;
+        tertiaryHue = hsl.h;
+    } else if (type === 'analogous') {
+        secondaryHue = (hsl.h + 30) % 360;
+        tertiaryHue = (hsl.h - 30) % 360;
+        if(tertiaryHue < 0) tertiaryHue += 360;
+    } else if (type === 'triadic') {
+        secondaryHue = (hsl.h + 120) % 360;
+        tertiaryHue = (hsl.h + 240) % 360;
+    }
+
+    document.getElementById('bg').value = hslToHex(secondaryHue, 15, 95);
+    document.getElementById('sidebar').value = hslToHex(secondaryHue, 10, 92);
+    document.getElementById('received').value = hslToHex(tertiaryHue, 20, 90);
+    document.getElementById('receivedText').value = hslToHex(tertiaryHue, 80, 20);
+    document.getElementById('border').value = hslToHex(hsl.h, 15, 85);
+    
+    updatePreview();
+}
+
+let baseSnapshot = {};
+function adjustColorProperty(prop, offset) {
+    const val = parseInt(offset);
+    ids.forEach(id => {
+        const inputEl = document.getElementById(id);
+        if (!baseSnapshot[id]) baseSnapshot[id] = inputEl.value;
+        let hsl = hexToHSL(baseSnapshot[id]);
+        
+        if (prop === 'lightness') {
+            hsl.l = Math.min(100, Math.max(0, hsl.l + val));
+        } else if (prop === 'saturation') {
+            hsl.s = Math.min(100, Math.max(0, hsl.s + val));
+        }
+        inputEl.value = hslToHex(hsl.h, hsl.s, hsl.l);
+    });
+    updatePreview();
+    if(val === 0) baseSnapshot = {};
+}
 
 function downloadTheme(){
-
-let blob =
-new Blob(
-[cssText()],
-{type:"text/plain"}
-);
-
-
-let a=document.createElement("a");
-
-a.href=
-URL.createObjectURL(blob);
-
-
-a.download=
-document.getElementById("themeName").value+".txt";
-
-
-a.click();
-
+    let blob = new Blob([generateCSSText()], {type: "text/css"});
+    let a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = getCleanThemeSlug() + ".css";
+    a.click();
 }
-
-
 
 function copyTheme(){
-
-navigator.clipboard.writeText(
-cssText()
-);
-
-alert("CSS copied!");
-
+    navigator.clipboard.writeText(generateCSSText());
+    alert("CSS code block copied to clipboard.");
 }
 
+function importCSS() {
+    const txt = document.getElementById('importArea').value;
+    if(!txt.trim()) return alert("Please enter valid CSS text block parameters first.");
+    
+    const nameMatch = txt.match(/data-theme=["']([^"']+)["']/);
+    if(nameMatch && nameMatch[1]) {
+        document.getElementById('themeName').value = nameMatch[1];
+    }
 
+    const varMap = {
+        '--bg-color': 'bg',
+        '--chat-bg': 'chat',
+        '--sidebar-bg': 'sidebar',
+        '--text-color': 'text',
+        '--border-color': 'border',
+        '--bubble-sent': 'sent',
+        '--text-sent': 'sentText',
+        '--bubble-received': 'received',
+        '--text-received': 'receivedText',
+        '--timestamp-color': 'timestamp'
+    };
 
-updatePreview();
+    let successfullyFound = false;
+    for (const [cssVar, htmlId] of Object.entries(varMap)) {
+        const regex = new RegExp(`${cssVar}\\s*:\\s*(#[0-9a-fA-F]{3,8}|[a-zA-Z]+)`);
+        const match = txt.match(regex);
+        if(match && match[1]) {
+            document.getElementById(htmlId).value = match[1];
+            successfullyFound = true;
+        }
+    }
 
+    if(successfullyFound) {
+        updatePreview();
+        alert("Theme parameters parsed successfully.");
+    } else {
+        alert("No variables were extracted. Verify formatting string inputs.");
+    }
+}
 </script>
-
 
 </body>
 </html>
