@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Chat Theme Creator</title>
+
+<style>
+
+* {
+    box-sizing:border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background:#eef2f7;
+    padding:20px;
+}
+
+.container {
+    max-width:900px;
+    margin:auto;
+}
+
+h1 {
+    text-align:center;
+}
+
+.editor {
+    background:white;
+    padding:20px;
+    border-radius:14px;
+    box-shadow:0 5px 20px #0002;
+}
+
+.grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:12px;
+}
+
+
+.color-box {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px;
+    background:#f5f5f5;
+    border-radius:8px;
+}
+
+
+input[type=color] {
+    width:55px;
+    height:35px;
+    border:none;
+}
+
+
+input[type=text] {
+    width:100%;
+    padding:10px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    margin-bottom:15px;
+}
+
+
+.preview {
+    margin-top:20px;
+    padding:15px;
+    border-radius:12px;
+}
+
+
+.chat {
+    padding:15px;
+    border-radius:10px;
+}
+
+
+.msg {
+    padding:10px;
+    margin:8px;
+    border-radius:15px;
+    width:max-content;
+    max-width:80%;
+}
+
+
+.sent {
+    margin-left:auto;
+}
+
+
+button {
+    margin-top:15px;
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    background:#007bff;
+    color:white;
+    cursor:pointer;
+}
+
+
+button:hover {
+    opacity:.8;
+}
+
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🎨 Chat Theme Creator</h1>
+
+
+<div class="editor">
+
+<label>
+Theme Name
+</label>
+
+<input id="themeName" value="my-theme">
+
+
+<div class="grid">
+
+
+<div class="color-box">
+Background
+<input id="bg" type="color" value="#f4f6f9">
+</div>
+
+
+<div class="color-box">
+Chat Background
+<input id="chat" type="color" value="#ffffff">
+</div>
+
+
+<div class="color-box">
+Sidebar
+<input id="sidebar" type="color" value="#f8f9fa">
+</div>
+
+
+<div class="color-box">
+Text
+<input id="text" type="color" value="#333333">
+</div>
+
+
+<div class="color-box">
+Border
+<input id="border" type="color" value="#e0e0e0">
+</div>
+
+
+<div class="color-box">
+Sent Bubble
+<input id="sent" type="color" value="#007bff">
+</div>
+
+
+<div class="color-box">
+Sent Text
+<input id="sentText" type="color" value="#ffffff">
+</div>
+
+
+<div class="color-box">
+Received Bubble
+<input id="received" type="color" value="#f1f0f0">
+</div>
+
+
+<div class="color-box">
+Received Text
+<input id="receivedText" type="color" value="#333333">
+</div>
+
+
+<div class="color-box">
+Timestamp
+<input id="timestamp" type="color" value="#888888">
+</div>
+
+
+</div>
+
+
+<button onclick="downloadTheme()">
+⬇ Download Theme
+</button>
+
+
+<button onclick="copyTheme()">
+📋 Copy CSS
+</button>
+
+
+</div>
+
+
+
+<div class="preview" id="preview">
+
+<h2>Live Preview</h2>
+
+
+<div class="chat" id="chatPreview">
+
+
+<div class="msg receivedMsg">
+Hello! This is received
+</div>
+
+
+<div class="msg sentMsg">
+This is your message
+</div>
+
+
+<div class="msg receivedMsg">
+Your theme looks cool!
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+<script>
+
+
+const ids=[
+"bg",
+"chat",
+"sidebar",
+"text",
+"border",
+"sent",
+"sentText",
+"received",
+"receivedText",
+"timestamp"
+];
+
+
+function cssText(){
+
+
+let name =
+document.getElementById("themeName").value
+.replace(/[^a-zA-Z0-9-_]/g,"-");
+
+
+return `html[data-theme="${name}"] {
+    --bg-color: ${bg.value};
+    --chat-bg: ${chat.value};
+    --sidebar-bg: ${sidebar.value};
+    --text-color: ${text.value};
+    --border-color: ${border.value};
+    --bubble-sent: ${sent.value};
+    --text-sent: ${sentText.value};
+    --bubble-received: ${received.value};
+    --text-received: ${receivedText.value};
+    --timestamp-color: ${timestamp.value};
+}`;
+
+}
+
+
+
+function updatePreview(){
+
+
+document.body.style.background=bg.value;
+
+
+chatPreview.style.background=chat.value;
+
+
+chatPreview.style.color=text.value;
+
+
+document.querySelectorAll(".sentMsg")
+.forEach(x=>{
+x.style.background=sent.value;
+x.style.color=sentText.value;
+});
+
+
+document.querySelectorAll(".receivedMsg")
+.forEach(x=>{
+x.style.background=received.value;
+x.style.color=receivedText.value;
+});
+
+
+}
+
+
+
+document.querySelectorAll("input")
+.forEach(x=>{
+x.addEventListener("input",updatePreview);
+});
+
+
+
+function downloadTheme(){
+
+let blob =
+new Blob(
+[cssText()],
+{type:"text/plain"}
+);
+
+
+let a=document.createElement("a");
+
+a.href=
+URL.createObjectURL(blob);
+
+
+a.download=
+document.getElementById("themeName").value+".txt";
+
+
+a.click();
+
+}
+
+
+
+function copyTheme(){
+
+navigator.clipboard.writeText(
+cssText()
+);
+
+alert("CSS copied!");
+
+}
+
+
+
+updatePreview();
+
+</script>
+
+
+</body>
+</html>
